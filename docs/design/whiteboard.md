@@ -22,7 +22,6 @@ Customer -- "0, *"  Wallet
 Wallet "2" -- "0, *" Transaction
 
 note "Each entity must have a surrogate integer key that here is not explicitly shown" as N1
-note right of Wallet: the amount of money transacted \nis always dynamically computed \nfor simplicity
 note right of Customer: the email is unique
 
 @enduml
@@ -39,14 +38,11 @@ class Customer {
     surname
     deliveryAddress
     email
-    wallets: Wallet[]
 }
 class Wallet {
     id
     balance
     customer: Customer
-    recharges: Transaction[]
-    purchases: Transaction[]
 }
 class Transaction {
     id
@@ -56,11 +52,10 @@ class Transaction {
     timestamp
 }
 
-Customer -- "0, *"  Wallet
-Wallet "2" -- "0, *" Transaction
+Customer <-- "0, *"  Wallet
+Wallet "2" <-- "0, *" Transaction
 
 note "Each entity must have a surrogate integer key that here is not explicitly shown" as N1
-note right of Wallet: the amount of money transacted \nis always dynamically computed \nfor simplicity
 note right of Customer: the email is unique
 
 @enduml

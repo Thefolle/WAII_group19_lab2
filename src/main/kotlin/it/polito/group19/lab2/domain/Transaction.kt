@@ -5,5 +5,5 @@ import javax.persistence.*
 import javax.validation.constraints.Min
 
 @Entity
-class Transaction(@Id @GeneratedValue var tid: Long, @ManyToOne(targetEntity = Wallet::class, fetch = FetchType.LAZY) @JoinColumn(referencedColumnName = "wid") var debtor: Wallet, @ManyToOne(targetEntity = Wallet::class, fetch = FetchType.LAZY) @JoinColumn(referencedColumnName = "wid") var creditor: Wallet, @Min(value = 0) var transactedMoneyAmount: Float, var timestamp: LocalDateTime) {
+class Transaction(@Id @GeneratedValue var tid: Long, @Min(value = 0) var transactedMoneyAmount: Float, var timestamp: LocalDateTime, @ManyToOne var creditor: Wallet, @ManyToOne var debtor: Wallet) {
 }
