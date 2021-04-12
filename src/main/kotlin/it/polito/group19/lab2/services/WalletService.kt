@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 interface WalletService {
 
-    fun addWallet(customerId: Long)
+    fun addWallet(customerId: Long): Wallet
 
     fun getWallet(walletId: Long): Wallet
 

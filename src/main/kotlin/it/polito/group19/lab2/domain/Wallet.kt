@@ -4,5 +4,12 @@ import javax.persistence.*
 import javax.validation.constraints.Min
 
 @Entity
-class Wallet(@Id @GeneratedValue var wid: Long, @Min(value = 0) var balance: Float, @ManyToOne(fetch=FetchType.LAZY) var customer: Customer, @OneToMany(mappedBy = "creditor") var recharges: MutableList<Transaction>, @OneToMany(mappedBy = "debtor") var purchases: MutableList<Transaction>) {
+class Wallet(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var wid: Long,
+    @Min(value = 0) var balance: Float,
+    @ManyToOne(fetch=FetchType.LAZY) var customer: Customer,
+    @OneToMany(mappedBy = "creditor") var recharges: MutableList<Transaction>,
+    @OneToMany(mappedBy = "debtor") var purchases: MutableList<Transaction>) {
 }
