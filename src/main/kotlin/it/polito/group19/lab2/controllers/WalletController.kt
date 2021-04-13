@@ -1,6 +1,7 @@
 package it.polito.group19.lab2.controllers
 
 import it.polito.group19.lab2.domain.Customer
+import it.polito.group19.lab2.dto.WalletDto
 import it.polito.group19.lab2.services.WalletServiceImpl
 import org.springframework.web.bind.annotation.*
 
@@ -14,11 +15,11 @@ class WalletController(private  val walletServiceImpl: WalletServiceImpl) {
     }
 
 
-//    @GetMapping("/wallet/{walletId}")
-//    fun getWallet(@PathVariable("walletId") walletId: Long): WalletDto{
-//        return
-//    }
-//
+    @GetMapping("/wallet/{walletId}")
+    fun getWallet(@PathVariable("walletId") walletId: Long): WalletDto {
+        return walletServiceImpl.getWallet(walletId).;
+    }
+
 //    @PostMapping("/wallet/{walletId}/transaction")
 //    fun performTransaction(@PathVariable("walletId") walletId: Long,
 //                        @RequestBody t: TransactionDto): TransactionDto{
