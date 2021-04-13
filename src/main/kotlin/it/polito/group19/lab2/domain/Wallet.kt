@@ -12,13 +12,15 @@ class Wallet(
     @Min(value = 0) var balance: Double =0.0,
     @ManyToOne(fetch=FetchType.LAZY) var customer: Customer?=Customer(),
     @OneToMany(mappedBy = "creditor") var recharges: MutableList<Transaction>?= mutableListOf< Transaction>(),
-    @OneToMany(mappedBy = "debtor") var purchases: MutableList<Transaction>)
-    fun Wallet.toDto()= WalletDto(
-        wid=wid?:0,
+    @OneToMany(mappedBy = "debtor") var purchases: MutableList<Transaction>) {
+    fun toDto() = WalletDto(
+        wid = wid ?: 0,
         balance = balance,
-        customerId = customer?.cid?:0,
-        rechargeIds = recharges?.filter{it.transactedMoneyAmount>0}?.map{it.tid} as MutableList<Long>,
-        purchaseIds = purchases?.filter { it.transactedMoneyAmount<0 }?.map{it.tid} as MutableList<Long>,
-        
+        customerId = customer?.cid ?: 0,
+        rechargeIds = recharges?.filter { it.transactedMoneyAmount > 0 }?.map { it.tid } as MutableList<Long>,
+        purchaseIds = purchases?.filter { it.transactedMoneyAmount < 0 }?.map { it.tid } as MutableList<Long>
+
     )
-)
+
+
+}

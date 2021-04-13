@@ -17,7 +17,7 @@ class WalletController(private  val walletServiceImpl: WalletServiceImpl) {
 
     @GetMapping("/wallet/{walletId}")
     fun getWallet(@PathVariable("walletId") walletId: Long): WalletDto {
-        return walletServiceImpl.getWallet(walletId).;
+        return walletServiceImpl.getWallet(walletId).toDto()
     }
 
 //    @PostMapping("/wallet/{walletId}/transaction")
