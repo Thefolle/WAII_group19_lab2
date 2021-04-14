@@ -5,6 +5,8 @@ import it.polito.group19.lab2.domain.Wallet
 import it.polito.group19.lab2.dto.TransactionDto
 import it.polito.group19.lab2.dto.WalletDto
 import it.polito.group19.lab2.services.WalletServiceImpl
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -14,33 +16,40 @@ import java.time.ZoneOffset
 class WalletController(private val walletServiceImpl: WalletServiceImpl) {
 
     @PostMapping("")
-    fun addWallet(@RequestBody customerId: Long): WalletDto {
-        return walletServiceImpl.addWallet(customerId).toDto()
+    fun addWallet(@RequestBody customerId: Long): ResponseEntity<WalletDto> {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            walletServiceImpl.addWallet(customerId).toDto()
+        )
     }
 
 
     @GetMapping("/{walletId}")
-    fun getWallet(@PathVariable("walletId") walletId: Long): WalletDto {
-        return walletServiceImpl.getWallet(walletId).toDto()
+    fun getWallet(@PathVariable("walletId") walletId: Long): ResponseEntity<WalletDto> {
+        return ResponseEntity.status(HttpStatus.OK).body(walletServiceImpl.getWallet(walletId).toDto())
     }
 
     @PostMapping("/{walletId}/transactions")
     fun performTransaction(@PathVariable("walletId") walletId: Long,
-                        @RequestBody transaction: TransactionDto): TransactionDto{
-        return walletServiceImpl.performTransaction(transaction.creditorId, transaction.debtorId, transaction.transactedMoneyAmount).toDto()
-    }
-
-    @GetMapping("/{walletId}/transactions")
-    fun getTransactions(@PathVariable("walletId") walletId: Long,
-                                   @RequestParam("from") from: Long,
-                                   @RequestParam("to") to: Long): List<TransactionDto> {
-        return walletServiceImpl.getTransactions(walletId, LocalDateTime.ofEpochSecond(from / 1000, 0, ZoneOffset.UTC), LocalDateTime.ofEpochSecond(to / 1000, 0, ZoneOffset.UTC)).map { it.toDto() }
+                        @RequestBody transaction: TransactionDto): ResponseEntity<TransactionDto> {
+        return ResponseEntity.status(HttpStatus.OK).body(walletServiceImpl.performTransaction(transaction.creditorId, transaction.debtorId, transaction.transactedMoneyAmount).toDto())
     }
 
     @GetMapping("/{walletId}/transactions/{transactionId}")
     fun getTransaction(@PathVariable("walletId") walletId: Long,
-                             @PathVariable("transactionId") transactionId: Long): TransactionDto {
-        return walletServiceImpl.getTransaction(walletId, transactionId).toDto()
+                             @PathVariable("transactionId") transactionId: Long): ResponseEntity<TransactionDto> {
+        return ResponseEntity.status(HttpStatus.OK).body(walletServiceImpl.getTransaction(walletId, transactionId).toDto())
+    }
+
+
+    @GetMapping("/{walletId}/transactions")
+    fun getTransactions(@PathVariable("walletId") walletId: Long,
+                        @RequestParam("from") from: Long,
+                        @RequestParam("to") to: Long): ResponseEntity<List<TransactionDto>> {
+        var result = walletServiceImpl.getTransactions(walletId, LocalDateTime.ofEpochSecond(from / 1000, 0, ZoneOffset.UTC), LocalDateTime.ofEpochSecond(to / 1000, 0, ZoneOffset.UTC))
+
+        return if (result.isEmpty())
+            ResponseEntity.status(HttpStatus.NO_CONTENT).build()
+        else ResponseEntity.status(HttpStatus.OK).body(result.map { it.toDto() })
     }
 
 }
