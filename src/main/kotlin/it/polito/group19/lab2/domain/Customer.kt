@@ -11,7 +11,7 @@ class Customer(
     var name: String?=" ",
     var surname: String?=" ",
     var deliveryAddress: String?=" ",
-    @Column(unique = true) var email: String?=" ",
+    @Column(unique = true) var email: String? = " ",
     @OneToMany(targetEntity = Wallet::class, mappedBy = "wid") var wallets: MutableList<Wallet>?= mutableListOf<Wallet>()) {
     fun toDTO() = CustomerDto(
         cid = cid!!,

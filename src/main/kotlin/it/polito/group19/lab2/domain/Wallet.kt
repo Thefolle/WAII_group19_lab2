@@ -10,13 +10,13 @@ class Wallet(
     @GeneratedValue(strategy = GenerationType.AUTO)
     var wid: Long?=0,
     @Min(value = 0) var balance: Double =0.0,
-    @ManyToOne(fetch=FetchType.LAZY) var customerId: Long,
+    @ManyToOne(fetch=FetchType.LAZY) var customer: Customer,
     @OneToMany(mappedBy = "creditor") var recharges: MutableList<Transaction>?= mutableListOf< Transaction>(),
-    @OneToMany(mappedBy = "debtor") var purchases: MutableList<Transaction>) {
+    @OneToMany(mappedBy = "debtor") var purchases: MutableList<Transaction>?= mutableListOf< Transaction>()) {
     fun toDto() = WalletDto(
         wid = wid !!,
         balance = balance,
-        customerId = customerId,
+        customerId = customer.cid!!,
         rechargeIds = recharges?.filter { it.transactedMoneyAmount > 0 }?.map { it.tid } as MutableList<Long>,
         purchaseIds = purchases?.filter { it.transactedMoneyAmount < 0 }?.map { it.tid } as MutableList<Long>
 

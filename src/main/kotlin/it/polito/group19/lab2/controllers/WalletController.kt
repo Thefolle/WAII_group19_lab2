@@ -1,17 +1,18 @@
 package it.polito.group19.lab2.controllers
 
 import it.polito.group19.lab2.domain.Customer
+import it.polito.group19.lab2.domain.Wallet
 import it.polito.group19.lab2.dto.WalletDto
 import it.polito.group19.lab2.services.WalletServiceImpl
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/wallet")
-class WalletController(private  val walletServiceImpl: WalletServiceImpl) {
+class WalletController(private val walletServiceImpl: WalletServiceImpl) {
 
     @PostMapping("/wallet")
-    fun addWallet(@RequestBody c: Customer) {
-
+    fun addWallet(@RequestBody customerId: Long): WalletDto {
+        return walletServiceImpl.addWallet(customerId).toDto()
     }
 
 

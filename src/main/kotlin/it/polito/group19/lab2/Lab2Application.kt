@@ -16,11 +16,13 @@ class Lab2Application{
             val c1= Customer()
             c1.name="giacomo"
             c1.surname="matteotti"
+            c1.email = "ciao@matteotti.it"
             c1.deliveryAddress="via dei decollati,23"
             customerRpository.save(c1);
             val c2= Customer()
             c2.name="giacomo"
             c2.surname="matteotti"
+            c2.email = "salve@matteotti.it"
             c2.deliveryAddress="via dei decollati,23"
             customerRpository.save(c2);
             customerRpository.findAll().forEach{

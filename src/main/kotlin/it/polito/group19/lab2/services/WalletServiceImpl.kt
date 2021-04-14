@@ -12,16 +12,14 @@ import java.time.LocalDateTime
 @Transactional
 class WalletServiceImpl(val walletRepository: WalletRepository, val customerRepository: CustomerRepository): WalletService {
 
-    override fun addWallet(customerId: Long): Boolean{
-
-        var customer= customerRepository.findById(customerId).get()
-        var wallet: Wallet
-        wallet=
-        TODO("Not yet implemented")
+    override fun addWallet(customerId: Long): Wallet {
+        var customer = customerRepository.findById(customerId).get()
+        var wallet : Wallet = Wallet(null, 0.0, customer)
+        return walletRepository.save(wallet)
     }
 
     override fun getWallet(walletId: Long): Wallet {
-     return   walletRepository.findById(walletId).get()
+     return  walletRepository.findById(walletId).get()
     }
 
     override fun performTransaction(creditorId: Long, debtorId: Long, transactedMoneyAmount: Float) {
