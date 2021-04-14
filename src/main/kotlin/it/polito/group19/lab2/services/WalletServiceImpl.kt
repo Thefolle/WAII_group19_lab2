@@ -39,11 +39,15 @@ class WalletServiceImpl(val walletRepository: WalletRepository, val customerRepo
     }
 
     override fun getTransaction(walletId: Long, transactionId: Long): Transaction {
-        //return walletRepository.findById(walletId).get().purchases?.find { it.tid?.equals(transactionId) !! }!!
+        // This snippet doesn't work because the list of purchases/recharges is not automatically filled by Spring Data
+        // return walletRepository.findById(walletId).get().purchases?.find { it.tid?.equals(transactionId) !! }!!
+
         return transactionRepository.findById(transactionId).get()
     }
 
     override fun getTransactions(walletId: Long, startDate: LocalDateTime, endDate: LocalDateTime): List<Transaction> {
-        TODO("Not yet implemented")
+        return transactionRepository
+            .findByTimestampBetween(startDate, endDate)
+            .filter { it.creditor.wid?.equals(walletId) ?: false || it.debtor.wid?.equals(walletId) ?: false }
     }
 }

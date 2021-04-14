@@ -6,6 +6,8 @@ import it.polito.group19.lab2.dto.TransactionDto
 import it.polito.group19.lab2.dto.WalletDto
 import it.polito.group19.lab2.services.WalletServiceImpl
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 @RestController
 @RequestMapping("/wallets", consumes = ["application/json"], produces = ["application/json"])
@@ -27,17 +29,17 @@ class WalletController(private val walletServiceImpl: WalletServiceImpl) {
                         @RequestBody transaction: TransactionDto): TransactionDto{
         return walletServiceImpl.performTransaction(transaction.creditorId, transaction.debtorId, transaction.transactedMoneyAmount).toDto()
     }
-//
-//    @GetMapping("/{walletId}/transactions?from=<dateInMillis>&to=<dateInMillis>")
-//    fun getTransactions(@PathVariable("walletId") walletId: Long,
-//                                   @RequestParam("from") from: Long,
-//                                   @RequestParam("to") to: Long): List<TransactionDto>{
-//        return
-//    }
+
+    @GetMapping("/{walletId}/transactions")
+    fun getTransactions(@PathVariable("walletId") walletId: Long,
+                                   @RequestParam("from") from: Long,
+                                   @RequestParam("to") to: Long): List<TransactionDto> {
+        return walletServiceImpl.getTransactions(walletId, LocalDateTime.ofEpochSecond(from / 1000, 0, ZoneOffset.UTC), LocalDateTime.ofEpochSecond(to / 1000, 0, ZoneOffset.UTC)).map { it.toDto() }
+    }
 
     @GetMapping("/{walletId}/transactions/{transactionId}")
     fun getTransaction(@PathVariable("walletId") walletId: Long,
-                             @PathVariable("transactionId") transactionId: Long): TransactionDto{
+                             @PathVariable("transactionId") transactionId: Long): TransactionDto {
         return walletServiceImpl.getTransaction(walletId, transactionId).toDto()
     }
 
