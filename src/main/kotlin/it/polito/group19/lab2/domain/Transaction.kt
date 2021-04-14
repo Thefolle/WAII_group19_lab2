@@ -10,14 +10,14 @@ import javax.validation.constraints.Min
 class Transaction(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var tid: Long,
+    var tid: Long?,
     @Min(value = 0) var transactedMoneyAmount: Float,
     var timestamp: LocalDateTime,
     @ManyToOne(fetch=FetchType.LAZY) var creditor: Wallet,
     @ManyToOne(fetch=FetchType.LAZY) var debtor: Wallet){
-fun toDTO() = TransactionDto(
-    tid=tid!!,
-    transactedMoneyAmount= (transactedMoneyAmount?:0.0) as Float,
+fun toDto() = TransactionDto(
+    tid=tid,
+    transactedMoneyAmount= transactedMoneyAmount,
     timestamp=timestamp,
     creditorId = creditor.wid!!,
     debtorId = debtor.wid!!

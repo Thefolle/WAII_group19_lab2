@@ -9,7 +9,7 @@ class Wallet(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var wid: Long?=0,
-    @Min(value = 0) var balance: Double =0.0,
+    @Min(value = 0) var balance: Float = 0.0F,
     @ManyToOne(fetch=FetchType.LAZY) var customer: Customer,
     @OneToMany(mappedBy = "creditor") var recharges: MutableList<Transaction>?= mutableListOf< Transaction>(),
     @OneToMany(mappedBy = "debtor") var purchases: MutableList<Transaction>?= mutableListOf< Transaction>()) {
@@ -21,6 +21,16 @@ class Wallet(
         purchaseIds = purchases?.filter { it.transactedMoneyAmount < 0 }?.map { it.tid } as MutableList<Long>
 
     )
+
+    fun addBalance(difference: Float): Float {
+        if (balance + difference  < 0.0F) {
+            balance = 0.0F
+        } else {
+            balance += difference
+        }
+
+        return balance
+    }
 
 
 }

@@ -9,14 +9,14 @@ interface WalletService {
 
     fun getWallet(walletId: Long): Wallet
 
-    fun performTransaction(creditorId: Long, debtorId: Long, transactedMoneyAmount: Float)
-
-    fun getTransactions(walletId: Long): List<Transaction>
+    fun performTransaction(creditorId: Long, debtorId: Long, transactedMoneyAmount: Float): Transaction
 
     /**
      * @param startDate: it is included in the search range
      * @param endDate: it is included in the search range
      */
     fun getTransactions(walletId: Long, startDate: LocalDateTime, endDate: LocalDateTime): List<Transaction>
+
+    fun getTransaction(walletId: Long, transactionId: Long): Transaction
 
 }
