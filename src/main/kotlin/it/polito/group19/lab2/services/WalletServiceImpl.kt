@@ -1,5 +1,6 @@
 package it.polito.group19.lab2.services
 
+import it.polito.group19.lab2.domain.Customer
 import it.polito.group19.lab2.domain.Transaction
 import it.polito.group19.lab2.domain.Wallet
 import it.polito.group19.lab2.repositories.CustomerRepository
@@ -19,7 +20,7 @@ class WalletServiceImpl(val walletRepository: WalletRepository, val customerRepo
         var customerOptional = customerRepository.findById(customerId)
         if (customerOptional.isEmpty) throw ResponseStatusException(HttpStatus.NOT_FOUND, "No customer with id ${customerId} exists.")
         var customer = customerOptional.get()
-        var wallet : Wallet = Wallet(null, 0.0F, customer)
+        var wallet = Wallet(null, 0.0F, customer)
         return walletRepository.save(wallet)
     }
 

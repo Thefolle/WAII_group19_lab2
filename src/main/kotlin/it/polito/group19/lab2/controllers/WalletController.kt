@@ -16,7 +16,8 @@ import java.time.ZoneOffset
 class WalletController(private val walletServiceImpl: WalletServiceImpl) {
 
     @PostMapping("")
-    fun addWallet(@RequestBody customerId: Long): ResponseEntity<WalletDto> {
+    fun addWallet(@RequestBody customer: Customer): ResponseEntity<WalletDto> {
+        val customerId = customer.cid!!
         return ResponseEntity.status(HttpStatus.CREATED).body(
             walletServiceImpl.addWallet(customerId).toDto()
         )
@@ -28,7 +29,7 @@ class WalletController(private val walletServiceImpl: WalletServiceImpl) {
         return ResponseEntity.status(HttpStatus.OK).body(walletServiceImpl.getWallet(walletId).toDto())
     }
 
-    @PostMapping("/{walletId}/transactions")
+    @PostMapping("/{walletId}/transaction")
     fun performTransaction(@PathVariable("walletId") walletId: Long,
                         @RequestBody transaction: TransactionDto): ResponseEntity<TransactionDto> {
         return ResponseEntity.status(HttpStatus.OK).body(walletServiceImpl.performTransaction(transaction.creditorId, transaction.debtorId, transaction.transactedMoneyAmount).toDto())
