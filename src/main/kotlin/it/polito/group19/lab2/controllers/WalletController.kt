@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 
 @RestController
-@RequestMapping("/wallet")
+@RequestMapping("/wallets")
 class WalletController(private val walletServiceImpl: WalletServiceImpl) {
 
     @PostMapping("")
@@ -29,7 +29,7 @@ class WalletController(private val walletServiceImpl: WalletServiceImpl) {
         return ResponseEntity.status(HttpStatus.OK).body(walletServiceImpl.getWallet(walletId).toDto())
     }
 
-    @PostMapping("/{walletId}/transaction")
+    @PostMapping("/{walletId}/transactions")
     fun performTransaction(@PathVariable("walletId") walletId: Long,
                         @RequestBody transaction: TransactionDto): ResponseEntity<TransactionDto> {
         return ResponseEntity.status(HttpStatus.OK).body(walletServiceImpl.performTransaction(transaction.creditorId, transaction.debtorId, transaction.transactedMoneyAmount).toDto())
