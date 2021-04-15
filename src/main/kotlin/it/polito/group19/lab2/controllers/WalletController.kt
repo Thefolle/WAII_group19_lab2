@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 
 @RestController
-@RequestMapping("/wallet", consumes = ["application/json"], produces = ["application/json"])
+@RequestMapping("/wallet")
 class WalletController(private val walletServiceImpl: WalletServiceImpl) {
 
     @PostMapping("")

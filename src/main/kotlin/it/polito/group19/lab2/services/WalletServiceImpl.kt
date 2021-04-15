@@ -34,6 +34,8 @@ class WalletServiceImpl(val walletRepository: WalletRepository, val customerRepo
         var creditor = getWallet(creditorId)
         var debtor = getWallet(debtorId)
 
+        if (debtor.balance < transactedMoneyAmount) throw ResponseStatusException(HttpStatus.FORBIDDEN, "Not enough money!")
+
         creditor.addBalance(transactedMoneyAmount)
         debtor.addBalance(-transactedMoneyAmount)
 
