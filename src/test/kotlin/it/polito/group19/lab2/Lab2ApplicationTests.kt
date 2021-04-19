@@ -38,6 +38,8 @@ class Lab2ApplicationTests {
         user.addRole(Rolename.ADMIN)
         assertThat(user.getRoles().size).isEqualTo(2)
 
+        assertThat(userRepository.save(user).getRoles()).containsAll(user.getRoles())
+
         user.removeRole(Rolename.ADMIN)
         assertThat(user.getRoles()).doesNotContain(Rolename.ADMIN)
 
@@ -46,6 +48,7 @@ class Lab2ApplicationTests {
 
         user.removeRole(Rolename.CUSTOMER)
         assertThat(user.getRoles().size).isEqualTo(0)
+
     }
 
 }
