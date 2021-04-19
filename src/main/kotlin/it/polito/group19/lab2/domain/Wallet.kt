@@ -1,6 +1,6 @@
 package it.polito.group19.lab2.domain
 
-import it.polito.group19.lab2.dto.WalletDto
+import it.polito.group19.lab2.DTO.WalletDTO
 import javax.persistence.*
 import javax.validation.constraints.Min
 
@@ -18,7 +18,7 @@ class Wallet(
     @OneToMany(mappedBy = "debtor")
     var purchases: MutableList<Transaction>?= mutableListOf< Transaction>()) {
 
-    fun toDto() = WalletDto(
+    fun toDto() = WalletDTO(
         wid = wid !!,
         balance = balance,
         customerId = customer.cid!!,

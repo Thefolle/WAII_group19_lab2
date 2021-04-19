@@ -1,8 +1,6 @@
-package it.polito.group19.lab2.dto
+package it.polito.group19.lab2.DTO
 
-import it.polito.group19.lab2.domain.Customer
-
-data class WalletDto(
+data class WalletDTO(
     var wid: Long,
     var balance: Float,
     var customerId: Long,

@@ -1,6 +1,6 @@
 package it.polito.group19.lab2.domain
 
-import it.polito.group19.lab2.dto.CustomerDto
+import it.polito.group19.lab2.DTO.CustomerDTO
 import javax.persistence.*
 
 @Entity
@@ -15,7 +15,7 @@ class Customer(
     @OneToMany(targetEntity = Wallet::class, mappedBy = "wid")
     var wallets: MutableList<Wallet>?= mutableListOf<Wallet>()) {
 
-    fun toDTO() = CustomerDto(
+    fun toDTO() = CustomerDTO(
         cid = cid!!,
         name = "$name",
         surname = "$surname",

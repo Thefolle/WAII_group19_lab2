@@ -1,8 +1,8 @@
-package it.polito.group19.lab2.dto
+package it.polito.group19.lab2.DTO
 
 import java.time.LocalDateTime
 
-data class TransactionDto(
+data class TransactionDTO(
     var tid: Long?,
     var transactedMoneyAmount: Float,
     var timestamp: LocalDateTime?,

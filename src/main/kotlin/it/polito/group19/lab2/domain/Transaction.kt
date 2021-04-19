@@ -1,7 +1,6 @@
 package it.polito.group19.lab2.domain
 
-import it.polito.group19.lab2.dto.CustomerDto
-import it.polito.group19.lab2.dto.TransactionDto
+import it.polito.group19.lab2.DTO.TransactionDTO
 import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.Min
@@ -19,7 +18,7 @@ class Transaction(
     @ManyToOne(fetch=FetchType.LAZY)
     var debtor: Wallet){
 
-    fun toDto() = TransactionDto(
+    fun toDto() = TransactionDTO(
         tid=tid,
         transactedMoneyAmount= transactedMoneyAmount,
         timestamp=timestamp,
