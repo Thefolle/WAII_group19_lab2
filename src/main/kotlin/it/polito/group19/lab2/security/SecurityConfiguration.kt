@@ -10,12 +10,12 @@ import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfiguration (passwordEncoder: PasswordEncoder): WebSecurityConfigurerAdapter(){
+class SecurityConfiguration (val passwordEncoder: PasswordEncoder): WebSecurityConfigurerAdapter(){
 
     override fun configure(authenticationManagerBuilder: AuthenticationManagerBuilder) {
         authenticationManagerBuilder.inMemoryAuthentication()
             .withUser("root")
-            .password("admin")
+            .password(passwordEncoder.encode("admin"))
             .roles("user")
     }
 
@@ -25,6 +25,8 @@ class SecurityConfiguration (passwordEncoder: PasswordEncoder): WebSecurityConfi
             .and()
             .formLogin()
             .permitAll()
+            .and()
+            .csrf().disable()
     }
 
 }
