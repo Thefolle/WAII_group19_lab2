@@ -24,6 +24,7 @@ class WalletController(private val walletServiceImpl: WalletServiceImpl) {
     }
 
 
+
     @GetMapping("/{walletId}")
     fun getWallet(@PathVariable("walletId") walletId: Long): ResponseEntity<WalletDto> {
         return ResponseEntity.status(HttpStatus.OK).body(walletServiceImpl.getWallet(walletId).toDto())
