@@ -10,13 +10,9 @@ import org.springframework.boot.test.web.client.TestRestTemplate
 @SpringBootTest
 abstract class Lab2ApplicationTests {
 
-//    @Autowired
-//    lateinit var testRestTemplate: TestRestTemplate
-
     @Test
     fun contextLoads() {
-//        println("Test result: " + testRestTemplate.postForObject("http://localhost:8080/wallets", 1, WalletDto::class.java).wid)
-//        assertTrue(false)
+          assertTrue(false)
     }
 
 }
