@@ -1,19 +1,16 @@
 package it.polito.group19.lab2.DTO
 
 import it.polito.group19.lab2.domain.User
+import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
- abstract class UserDetailsDTO: UserDetails
-
-  {
-      constructor(
-          uid: Long?,
-          uname: String,
-          mail: String,
-          pass:String,
-          isEn:Boolean,
-          roles:String
-      )
+class UserDetailsDTO(
+          var uid: Long?,
+          var uname: String,
+          var mail: String,
+          var pass: String,
+          var isEn:Boolean,
+          var roles:String): UserDetails {
 
 
     /**
@@ -21,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails
      * @return the password
      */
     override fun getPassword(): String {
-        TODO("Not yet implemented")
+        return pass
     }
 
     /**
@@ -30,6 +27,10 @@ import org.springframework.security.core.userdetails.UserDetails
      * @return the username (never `null`)
      */
     override fun getUsername(): String {
+        return uname
+    }
+
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         TODO("Not yet implemented")
     }
 
@@ -39,6 +40,18 @@ import org.springframework.security.core.userdetails.UserDetails
      * @return `true` if the user is enabled, `false` otherwise
      */
     override fun isEnabled(): Boolean {
-        TODO("Not yet implemented")
+        return isEn
+    }
+
+    override fun isAccountNonExpired(): Boolean {
+        return true
+    }
+
+    override fun isAccountNonLocked(): Boolean {
+        return true
+    }
+
+    override fun isCredentialsNonExpired(): Boolean {
+        return true
     }
 }

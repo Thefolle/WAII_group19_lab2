@@ -1,5 +1,6 @@
 package it.polito.group19.lab2.domain
 
+import it.polito.group19.lab2.DTO.UserDetailsDTO
 import org.hibernate.annotations.ColumnDefault
 import javax.persistence.*
 import javax.validation.constraints.Pattern
@@ -34,5 +35,14 @@ class User(
             roles = roles.split("_").filter { it != role.name }.joinToString("_")
         }
     }
+
+    fun toDTO() = UserDetailsDTO(
+            uid = uid!!,
+            uname = username,
+            pass = password,
+            mail = email,
+            isEn = isEnabled,
+            roles = roles
+    )
 
 }
