@@ -18,7 +18,7 @@ class WalletController(private val walletServiceImpl: WalletServiceImpl) {
     fun addWallet(@RequestBody customer: Customer): ResponseEntity<WalletDTO> {
         val customerId = customer.cid!!
         return ResponseEntity.status(HttpStatus.CREATED).body(
-            walletServiceImpl.addWallet(customerId).toDto()
+            walletServiceImpl.addWallet(customerId)
         )
     }
 
@@ -26,19 +26,19 @@ class WalletController(private val walletServiceImpl: WalletServiceImpl) {
 
     @GetMapping("/{walletId}")
     fun getWallet(@PathVariable("walletId") walletId: Long): ResponseEntity<WalletDTO> {
-        return ResponseEntity.status(HttpStatus.OK).body(walletServiceImpl.getWallet(walletId).toDto())
+        return ResponseEntity.status(HttpStatus.OK).body(walletServiceImpl.getWallet(walletId))
     }
 
     @PostMapping("/{walletId}/transactions")
     fun performTransaction(@PathVariable("walletId") walletId: Long,
                         @RequestBody transaction: TransactionDTO): ResponseEntity<TransactionDTO> {
-        return ResponseEntity.status(HttpStatus.OK).body(walletServiceImpl.performTransaction(transaction.creditorId, transaction.debtorId, transaction.transactedMoneyAmount).toDto())
+        return ResponseEntity.status(HttpStatus.OK).body(walletServiceImpl.performTransaction(transaction.creditorId, transaction.debtorId, transaction.transactedMoneyAmount))
     }
 
     @GetMapping("/{walletId}/transactions/{transactionId}")
     fun getTransaction(@PathVariable("walletId") walletId: Long,
                              @PathVariable("transactionId") transactionId: Long): ResponseEntity<TransactionDTO> {
-        return ResponseEntity.status(HttpStatus.OK).body(walletServiceImpl.getTransaction(walletId, transactionId).toDto())
+        return ResponseEntity.status(HttpStatus.OK).body(walletServiceImpl.getTransaction(walletId, transactionId))
     }
 
 
@@ -50,7 +50,7 @@ class WalletController(private val walletServiceImpl: WalletServiceImpl) {
 
         return if (result.isEmpty())
             ResponseEntity.status(HttpStatus.NO_CONTENT).build()
-        else ResponseEntity.status(HttpStatus.OK).body(result.map { it.toDto() })
+        else ResponseEntity.status(HttpStatus.OK).body(result)
     }
 
 }

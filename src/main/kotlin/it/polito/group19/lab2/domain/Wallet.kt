@@ -23,7 +23,7 @@ class Wallet(
         balance = balance,
         customerId = customer.cid!!,
         rechargeIds = recharges?.filter { it.transactedMoneyAmount > 0 }?.map { it.tid } as MutableList<Long>,
-        purchaseIds = purchases?.filter { it.transactedMoneyAmount < 0 }?.map { it.tid } as MutableList<Long>
+        purchaseIds = purchases?.filter { it.transactedMoneyAmount > 0 }?.map { it.tid } as MutableList<Long>
 
     )
 

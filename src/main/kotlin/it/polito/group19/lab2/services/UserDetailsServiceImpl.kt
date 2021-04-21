@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException
 @Transactional
 class UserDetailsServiceImpl(val userRepository: UserRepository): UserDetailsService {
 
-    fun getUserByUsername(username: String): User {
+    private fun getUserByUsername(username: String): User {
         val userOptional = userRepository.findByUsername(username)
         if (userOptional.isEmpty) throw UsernameNotFoundException("No User with username: $username exists.")
         val user = userOptional.get()
