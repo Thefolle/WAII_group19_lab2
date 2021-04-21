@@ -8,6 +8,7 @@ data class CustomerDTO(
     var surname: String,
     var deliveryAddress: String,
     var email: String,
-    var walletIds: MutableList<Wallet>
+    var walletIds: MutableList<Wallet>,
+    var user: Long
 
     )

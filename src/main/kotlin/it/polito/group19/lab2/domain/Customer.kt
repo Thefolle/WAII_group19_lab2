@@ -5,15 +5,19 @@ import javax.persistence.*
 
 @Entity
 class Customer(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var cid: Long?=0,
-    var name: String?=" ",
-    var surname: String?=" ",
-    var deliveryAddress: String?=" ",
-    @Column(unique = true) var email: String? = " ",
-    @OneToMany(targetEntity = Wallet::class, mappedBy = "wid")
-    var wallets: MutableList<Wallet>?= mutableListOf<Wallet>()) {
+        @Id
+        @GeneratedValue(strategy = GenerationType.AUTO)
+        var cid: Long?=0,
+        var name: String?=" ",
+        var surname: String?=" ",
+        var deliveryAddress: String?=" ",
+        @Column(unique = true)
+        var email: String? = " ",
+        @OneToOne
+        var user: User,
+        @OneToMany(targetEntity = Wallet::class, mappedBy = "wid")
+        var wallets: MutableList<Wallet>?= mutableListOf<Wallet>()
+    ) {
 
     fun toDTO() = CustomerDTO(
         cid = cid!!,
@@ -21,5 +25,6 @@ class Customer(
         surname = "$surname",
         deliveryAddress = "$deliveryAddress",
         email = "$email",
-        walletIds=wallets?: mutableListOf<Wallet>())
+        walletIds=wallets?: mutableListOf<Wallet>(),
+        user = user.uid!! )
 }

@@ -1,5 +1,6 @@
 package it.polito.group19.lab2.services
 
+import it.polito.group19.lab2.DTO.RegisterDTO
 import it.polito.group19.lab2.DTO.UserDetailsDTO
 import it.polito.group19.lab2.domain.Customer
 import it.polito.group19.lab2.domain.Rolename
@@ -7,13 +8,15 @@ import it.polito.group19.lab2.domain.User
 import it.polito.group19.lab2.repositories.UserRepository
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.server.ResponseStatusException
 
 @Service
 @Transactional
-class UserDetailsServiceImpl(val userRepository: UserRepository): UserDetailsService {
+class UserDetailsServiceImpl( val userRepository: UserRepository,
+                              val passwordEncoder: PasswordEncoder ): UserDetailsService {
 
     private fun getUserByUsername(username: String): User {
         val userOptional = userRepository.findByUsername(username)
@@ -27,16 +30,29 @@ class UserDetailsServiceImpl(val userRepository: UserRepository): UserDetailsSer
         return user.toDTO()
     }
 
-    override fun addUser(customer: Customer, userDTO: UserDetailsDTO) {
+//    override fun addUser(customer: Customer, userDTO: UserDetailsDTO) {
+//        val user = User(
+//                uid = null,
+//                username = userDTO.username,
+//                password = userDTO.password,
+//                email = userDTO.mail,
+//                isEnabled = userDTO.isEnabled,
+//                roles = userDTO.roles,
+//                customer = customer
+//        )
+//        userRepository.save(user)
+//    }
+
+    override fun addUser( registerDTO: RegisterDTO ) {
         val user = User(
                 uid = null,
-                username = userDTO.username,
-                password = userDTO.password,
-                email = userDTO.mail,
-                isEnabled = userDTO.isEnabled,
-                roles = userDTO.roles,
-                customer = customer
-        )
+                username = registerDTO.username,
+                password = passwordEncoder.encode(registerDTO.password),
+                email = registerDTO.email,
+                isEnabled = false,
+                roles = Rolename.CUSTOMER.toString()
+            )
+
         userRepository.save(user)
     }
 

@@ -1,10 +1,9 @@
 package it.polito.group19.lab2
 
-import it.polito.group19.lab2.domain.Customer
-import it.polito.group19.lab2.domain.Transaction
-import it.polito.group19.lab2.domain.Wallet
+import it.polito.group19.lab2.domain.*
 import it.polito.group19.lab2.repositories.CustomerRepository
 import it.polito.group19.lab2.repositories.TransactionRepository
+import it.polito.group19.lab2.repositories.UserRepository
 import it.polito.group19.lab2.repositories.WalletRepository
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -25,17 +24,32 @@ class Lab2Application{
     @Bean
     fun test(customerRepository: CustomerRepository,
              walletRepository: WalletRepository,
-             transactionRepository: TransactionRepository
+             transactionRepository: TransactionRepository,
+             userRepository: UserRepository
     ): CommandLineRunner {
         return CommandLineRunner{
 
+            // Register users
+            val u1 = User(null, "user1", passwordEncoder().encode("pass1"), "user1@gmail.com",
+                            false, Rolename.CUSTOMER.toString())
+            userRepository.save(u1)
+
+            val u2 = User(null, "user2", passwordEncoder().encode("pass2"), "user2@gmail.com",
+                            false, Rolename.CUSTOMER.toString())
+            userRepository.save(u2)
+
+            userRepository.findAll().forEach{
+                println("User (id: ${it.uid}, uname: ${it.username}, pass: ${it.password}, " +
+                        "email: ${it.email}, isEn: ${it.isEnabled}, role: ${it.roles} )")
+            }
+
             // Initialize two customer
             val c1= Customer(null, "giacomo", "matteotti",
-                "via dei decollati 23", "gia@email.com")
+                "via dei decollati 23", "gia@email.com", u1)
             customerRepository.save(c1);
 
             val c2= Customer(null, "sia", "teotti",
-                "via Valdieri 19", "siamo@email.com")
+                "via Valdieri 19", "siamo@email.com", u2)
             customerRepository.save(c2);
 
             // Add tree wallet
@@ -50,7 +64,7 @@ class Lab2Application{
 
             customerRepository.findAll().forEach{
                 println("Customer(id: ${it.cid}, name: ${it.name}, surname:${it.surname}, " +
-                        "addr: ${it.deliveryAddress}, email: ${it.email} )")
+                        "addr: ${it.deliveryAddress}, email: ${it.email}, user: ${it.user.uid} )")
             }
 
             walletRepository.findAll().forEach{
