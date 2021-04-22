@@ -1,6 +1,6 @@
 package it.polito.group19.lab2.domain
 
-import it.polito.group19.lab2.DTO.UserDetailsDTO
+import it.polito.group19.lab2.dto.UserDetailsDTO
 import org.hibernate.annotations.ColumnDefault
 import javax.persistence.*
 import javax.validation.constraints.Pattern

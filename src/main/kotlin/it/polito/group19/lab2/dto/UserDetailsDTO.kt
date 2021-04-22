@@ -1,6 +1,5 @@
-package it.polito.group19.lab2.DTO
+package it.polito.group19.lab2.dto
 
-import it.polito.group19.lab2.domain.User
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 

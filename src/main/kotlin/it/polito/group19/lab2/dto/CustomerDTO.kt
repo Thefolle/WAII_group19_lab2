@@ -1,4 +1,4 @@
-package it.polito.group19.lab2.DTO
+package it.polito.group19.lab2.dto
 
 import it.polito.group19.lab2.domain.Wallet
 

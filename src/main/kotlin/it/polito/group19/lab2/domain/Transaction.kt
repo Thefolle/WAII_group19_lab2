@@ -1,6 +1,6 @@
 package it.polito.group19.lab2.domain
 
-import it.polito.group19.lab2.DTO.TransactionDTO
+import it.polito.group19.lab2.dto.TransactionDTO
 import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.Min

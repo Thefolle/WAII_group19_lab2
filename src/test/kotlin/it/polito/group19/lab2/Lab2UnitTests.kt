@@ -1,8 +1,10 @@
 package it.polito.group19.lab2
 
+import it.polito.group19.lab2.dto.RegisterDTO
 import it.polito.group19.lab2.domain.Rolename
 import it.polito.group19.lab2.domain.User
 import it.polito.group19.lab2.repositories.UserRepository
+import it.polito.group19.lab2.services.UserDetailsServiceImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,6 +18,9 @@ class Lab2ApplicationTests {
 
     @Autowired
     lateinit var userRepository: UserRepository
+
+    @Autowired
+    lateinit var userDetailsServiceImpl: UserDetailsServiceImpl
 
     @Test
     fun `Test User's role methods`() {
@@ -44,5 +49,7 @@ class Lab2ApplicationTests {
         assertThat(user.getRoles().size).isEqualTo(0)
 
     }
+
+
 
 }

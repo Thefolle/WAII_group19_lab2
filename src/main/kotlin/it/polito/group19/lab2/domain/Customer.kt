@@ -1,6 +1,6 @@
 package it.polito.group19.lab2.domain
 
-import it.polito.group19.lab2.DTO.CustomerDTO
+import it.polito.group19.lab2.dto.CustomerDTO
 import javax.persistence.*
 
 @Entity

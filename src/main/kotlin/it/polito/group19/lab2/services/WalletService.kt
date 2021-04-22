@@ -1,9 +1,7 @@
 package it.polito.group19.lab2.services
 
-import it.polito.group19.lab2.DTO.TransactionDTO
-import it.polito.group19.lab2.DTO.WalletDTO
-import it.polito.group19.lab2.domain.Transaction
-import it.polito.group19.lab2.domain.Wallet
+import it.polito.group19.lab2.dto.TransactionDTO
+import it.polito.group19.lab2.dto.WalletDTO
 import java.time.LocalDateTime
 interface WalletService {
 

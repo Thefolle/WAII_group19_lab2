@@ -1,8 +1,8 @@
 package it.polito.group19.lab2.controllers
 
 import it.polito.group19.lab2.domain.Customer
-import it.polito.group19.lab2.DTO.TransactionDTO
-import it.polito.group19.lab2.DTO.WalletDTO
+import it.polito.group19.lab2.dto.TransactionDTO
+import it.polito.group19.lab2.dto.WalletDTO
 import it.polito.group19.lab2.services.WalletServiceImpl
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

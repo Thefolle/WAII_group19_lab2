@@ -1,8 +1,7 @@
 package it.polito.group19.lab2.services
 
-import it.polito.group19.lab2.DTO.RegisterDTO
-import it.polito.group19.lab2.DTO.UserDetailsDTO
-import it.polito.group19.lab2.domain.Customer
+import it.polito.group19.lab2.dto.RegisterDTO
+import it.polito.group19.lab2.dto.UserDetailsDTO
 import it.polito.group19.lab2.domain.Rolename
 import it.polito.group19.lab2.domain.User
 import it.polito.group19.lab2.repositories.UserRepository
@@ -44,13 +43,16 @@ class UserDetailsServiceImpl( val userRepository: UserRepository,
 //    }
 
     override fun addUser( registerDTO: RegisterDTO ) {
+        if (registerDTO.password != registerDTO.confirmPassword){
+            throw ResponseStatusException(HttpStatus.CONFLICT, "Password and confirmPassword don't match")
+        }
         val user = User(
                 uid = null,
                 username = registerDTO.username,
                 password = passwordEncoder.encode(registerDTO.password),
                 email = registerDTO.email,
                 isEnabled = false,
-                roles = Rolename.CUSTOMER.toString()
+                roles = Rolename.CUSTOMER.name
             )
 
         userRepository.save(user)
