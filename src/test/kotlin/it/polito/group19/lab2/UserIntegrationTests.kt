@@ -68,16 +68,16 @@ class UserIntegrationTests {
     private fun registerMismatchingPasswords(registerDTO: RegisterDTO) {
         var body = objectMapper.writeValueAsString(registerDTO);
 
-        var rawResponse = mvc?.perform(post("/auth/register").contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON).content(body))?.andExpect(status().isConflict);
+        mvc.perform(post("/auth/register").contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON).content(body)).andExpect(status().isConflict);
 
     }
 
     private fun register(registerDTO: RegisterDTO) {
         var body = objectMapper.writeValueAsString(registerDTO);
 
-        var rawResponse = mvc?.perform(post("/auth/register").contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON).content(body))?.andExpect(status().isCreated);
+        mvc.perform(post("/auth/register").contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON).content(body)).andExpect(status().isCreated);
 
     }
 
