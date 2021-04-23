@@ -1,6 +1,6 @@
 package it.polito.group19.lab2.controllers
 
-import it.polito.group19.lab2.domain.Customer
+import it.polito.group19.lab2.dto.CustomerDTO
 import it.polito.group19.lab2.dto.TransactionDTO
 import it.polito.group19.lab2.dto.WalletDTO
 import it.polito.group19.lab2.services.WalletServiceImpl
@@ -15,7 +15,7 @@ import java.time.ZoneOffset
 class WalletController(private val walletServiceImpl: WalletServiceImpl) {
 
     @PostMapping("")
-    fun addWallet(@RequestBody customer: Customer): ResponseEntity<WalletDTO> {
+    fun addWallet(@RequestBody customer: CustomerDTO): ResponseEntity<WalletDTO> {
         val customerId = customer.cid!!
         return ResponseEntity.status(HttpStatus.CREATED).body(
             walletServiceImpl.addWallet(customerId)

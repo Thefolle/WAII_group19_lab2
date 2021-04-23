@@ -17,7 +17,7 @@ import java.time.LocalDateTime
 @Transactional
 class WalletServiceImpl(val walletRepository: WalletRepository, val customerRepository: CustomerRepository, val transactionRepository: TransactionRepository): WalletService {
 
-    private fun getWalletbyId(walletId: Long): Wallet{
+    private fun getWalletbyId(walletId: Long): Wallet {
         val walletOptional = walletRepository.findById(walletId)
         if (walletOptional.isEmpty) throw ResponseStatusException(HttpStatus.NOT_FOUND, "No wallet with id ${walletId} exists.")
         return walletOptional.get()
