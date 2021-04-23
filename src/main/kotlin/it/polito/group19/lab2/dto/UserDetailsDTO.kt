@@ -2,14 +2,17 @@ package it.polito.group19.lab2.dto
 
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import javax.validation.constraints.Pattern
 
 class UserDetailsDTO(
           var uid: Long?,
           var uname: String,
+          @Pattern(regexp = ".*@.*", message = "Invalid email.")
           var mail: String,
           var pass: String,
           var isEn:Boolean,
-          var roles:String): UserDetails {
+          var roles:String
+          ): UserDetails {
 
 
     /**
@@ -30,7 +33,10 @@ class UserDetailsDTO(
     }
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        TODO("Not yet implemented")
+        return roles
+            .split("_")
+            .map { GrantedAuthority { it } }
+            .toMutableList()
     }
 
     /**
