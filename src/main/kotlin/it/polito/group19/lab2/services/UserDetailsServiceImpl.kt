@@ -43,17 +43,22 @@ class UserDetailsServiceImpl( val userRepository: UserRepository,
 //    }
 
     override fun addUser( registerDTO: RegisterDTO ) {
-        if (registerDTO.password != registerDTO.confirmPassword){
-            throw ResponseStatusException(HttpStatus.CONFLICT, "Password and confirmPassword don't match")
+        if (userRepository.existsByUsername(registerDTO.username)) {
+            throw ResponseStatusException(HttpStatus.IM_USED, "The username is already in use.")
+        } else if (userRepository.existsByEmail(registerDTO.email)) {
+            throw ResponseStatusException(HttpStatus.IM_USED, "The email is already linked to another account.")
+        } else if (registerDTO.password != registerDTO.confirmPassword) {
+            throw ResponseStatusException(HttpStatus.CONFLICT, "Password and confirmPassword don't match.")
         }
+
         val user = User(
-                uid = null,
-                username = registerDTO.username,
-                password = passwordEncoder.encode(registerDTO.password),
-                email = registerDTO.email,
-                isEnabled = false,
-                roles = Rolename.CUSTOMER.name
-            )
+            uid = null,
+            username = registerDTO.username,
+            password = passwordEncoder.encode(registerDTO.password),
+            email = registerDTO.email,
+            isEnabled = false,
+            roles = Rolename.CUSTOMER.name
+        )
 
         userRepository.save(user)
     }
