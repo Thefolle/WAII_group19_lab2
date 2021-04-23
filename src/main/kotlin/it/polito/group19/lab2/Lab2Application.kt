@@ -5,15 +5,21 @@ import it.polito.group19.lab2.repositories.CustomerRepository
 import it.polito.group19.lab2.repositories.TransactionRepository
 import it.polito.group19.lab2.repositories.UserRepository
 import it.polito.group19.lab2.repositories.WalletRepository
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.PropertySource
+import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.mail.javamail.JavaMailSenderImpl
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 import java.time.LocalDateTime
+import java.util.*
 
 @SpringBootApplication
+@PropertySource(value = ["classpath:application.properties"], ignoreResourceNotFound = false)
 class Lab2Application{
 
     @Bean
@@ -89,35 +95,37 @@ class Lab2Application{
                 println("Wallet: (id: ${it.wid}, balance: ${it.balance}, cid:${it.customer.cid} )")
             }
 
-//    customerRepository: CustomerRepository, walletRepository: WalletRepository): CommandLineRunner {
-//        return CommandLineRunner{
-//            val c1= Customer()
-//            c1.name="giacomo"
-//            c1.surname="matteotti"
-//            c1.email = "ciao@matteotti.it"
-//            c1.deliveryAddress="via dei decollati,23"
-//            customerRepository.save(c1);
-//            val c2= Customer()
-//            c2.name="giacomo"
-//            c2.surname="matteotti"
-//            c2.email = "salve@matteotti.it"
-//            c2.deliveryAddress="via dei decollati,23"
-//            customerRepository.save(c2);
-//            customerRepository.findAll().forEach{
-//                println("Customer(id: ${it.cid},name: ${it.name})");
-//            }
-
-            /*var wallet1 = Wallet(null, 5.0F, c1)
-            var wallet2 = Wallet(null, 15.0F, c2)
-            walletRepository.save(wallet1)
-            walletRepository.save(wallet2)
-
-            walletRepository.findAll().forEach {
-                println("Wallet(id: ${it.wid}, balance: ${it.balance}, customerId: ${it.customer.cid}, rechargesCount: ${it.recharges?.size}, purchasesCount: ${it.purchases?.size}")
-            }*/
-
         }
     }
+
+    @Bean
+    fun getMailSender(@Value("\${spring.mail.host}") host: String,
+                      @Value("\${spring.mail.port}") port: Int,
+                      @Value("\${spring.mail.username}") username: String,
+                      @Value("\${spring.mail.password}") password: String,
+                      @Value("\${spring.mail.protocol}") protocol: String,
+                      @Value("\${spring.mail.properties.mail.smtp.auth}") auth: Boolean,
+                      @Value("\${spring.mail.properties.mail.smtp.starttls.enable}") enable: Boolean,
+                      @Value("\${spring.mail.properties.mail.debug}") debug: Boolean
+    ): JavaMailSender {
+
+        var javaMailSenderImpl = JavaMailSenderImpl()
+        javaMailSenderImpl.host = host
+        javaMailSenderImpl.port = port
+        javaMailSenderImpl.username = username
+        javaMailSenderImpl.password = password
+        val props: Properties = javaMailSenderImpl.javaMailProperties
+        props["mail.transport.protocol"] = protocol
+        props["mail.smtp.auth"] = auth
+        props["mail.smtp.starttls.enable"] = enable
+        props["mail.debug"] = debug
+
+        // Uncomment to test the mail connection at startup
+        //javaMailSenderImpl.testConnection()
+
+        return javaMailSenderImpl
+    }
+
 }
 
 fun main(args: Array<String>) {

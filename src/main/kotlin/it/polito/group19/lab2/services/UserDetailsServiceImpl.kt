@@ -29,19 +29,6 @@ class UserDetailsServiceImpl( val userRepository: UserRepository,
         return user.toDTO()
     }
 
-//    override fun addUser(customer: Customer, userDTO: UserDetailsDTO) {
-//        val user = User(
-//                uid = null,
-//                username = userDTO.username,
-//                password = userDTO.password,
-//                email = userDTO.mail,
-//                isEnabled = userDTO.isEnabled,
-//                roles = userDTO.roles,
-//                customer = customer
-//        )
-//        userRepository.save(user)
-//    }
-
     override fun addUser( registerDTO: RegisterDTO ) {
         if (userRepository.existsByUsername(registerDTO.username)) {
             throw ResponseStatusException(HttpStatus.IM_USED, "The username is already in use.")
