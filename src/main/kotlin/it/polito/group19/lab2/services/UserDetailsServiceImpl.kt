@@ -14,8 +14,10 @@ import org.springframework.web.server.ResponseStatusException
 
 @Service
 @Transactional
-class UserDetailsServiceImpl( val userRepository: UserRepository,
-                              val passwordEncoder: PasswordEncoder ): UserDetailsService {
+class UserDetailsServiceImpl(val userRepository: UserRepository,
+                             val passwordEncoder: PasswordEncoder,
+                             val notificationService: NotificationServiceImpl,
+                             val mailService: MailServiceImpl): UserDetailsService {
 
     private fun getUserByUsername(username: String): User {
         val userOptional = userRepository.findByUsername(username)
@@ -48,6 +50,9 @@ class UserDetailsServiceImpl( val userRepository: UserRepository,
         )
 
         userRepository.save(user)
+        val tokenDTO = notificationService.createToken(user.username)
+        mailService.sendMessage(toMail = user.email, subject = "Registration Confirmation",
+                mailBody = "Confirm your registration by clicking on the following link: localhost:8080/auth/registrationConfirm?token=" + tokenDTO.token)
     }
 
     override fun addRole(role: Rolename, username: String) {
