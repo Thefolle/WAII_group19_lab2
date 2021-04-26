@@ -24,8 +24,8 @@ class AuthenticationController(private val userDetailsServiceImpl: UserDetailsSe
                                             " You will receive an email shortly to confirm your registration.")
     }
 
-    @GetMapping("/auth/registrationConfirm?token={token}")
-    fun registrationConfirm(@PathVariable("token") token: String): ResponseEntity<UserDetailsDTO>{
+    @GetMapping("/registrationConfirm")
+    fun registrationConfirm(@RequestParam("token") token: String): ResponseEntity<UserDetailsDTO>{
         val verifyToken = notificationServiceImpl.getToken(token)
         if (!notificationServiceImpl.tokenNotExpired(verifyToken.token)) throw ResponseStatusException(HttpStatus.NOT_FOUND, "Token not Expired!")
         userDetailsServiceImpl.enable(verifyToken.username)
