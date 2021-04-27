@@ -7,12 +7,12 @@ import javax.persistence.*
 class Customer(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        var cid: Long?=0,
-        var name: String?=" ",
-        var surname: String?=" ",
-        var deliveryAddress: String?=" ",
+        var cid: Long?,
+        var name: String?,
+        var surname: String?,
+        var deliveryAddress: String?,
         @Column(unique = true)
-        var email: String? = " ",
+        var email: String?,
         @OneToOne
         var user: User,
         @OneToMany(targetEntity = Wallet::class, mappedBy = "wid")
@@ -21,10 +21,10 @@ class Customer(
 
     fun toDTO() = CustomerDTO(
         cid = cid!!,
-        name = "$name",
-        surname = "$surname",
-        deliveryAddress = "$deliveryAddress",
-        email = "$email",
+        name = this.name ?: "",
+        surname = this.surname ?: "",
+        deliveryAddress = deliveryAddress ?: "",
+        email = email ?: "",
         walletIds=wallets?: mutableListOf<Wallet>(),
         user = user.uid!! )
 }

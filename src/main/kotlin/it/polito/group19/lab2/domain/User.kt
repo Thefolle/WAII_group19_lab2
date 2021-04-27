@@ -12,11 +12,9 @@ class User(
     @GeneratedValue
     var uid: Long?,
     @Column(unique = true, nullable = false)
-    @Pattern(regexp = "^.{8,}$")
     var username: String,
     var password: String,
     @Column(unique = true, nullable = false)
-    @Pattern(regexp = ".*@.*")
     var email: String,
     @ColumnDefault("false")
     var isEnabled: Boolean = false,

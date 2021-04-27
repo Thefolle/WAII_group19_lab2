@@ -6,6 +6,7 @@ import javax.validation.constraints.Pattern
 
 class UserDetailsDTO(
           var uid: Long?,
+          @Pattern(regexp = "^.{8,}$")
           var uname: String,
           @Pattern(regexp = ".*@.*", message = "Invalid email.")
           var mail: String,

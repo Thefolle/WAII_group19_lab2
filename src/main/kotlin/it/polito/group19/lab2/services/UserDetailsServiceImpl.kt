@@ -74,4 +74,13 @@ class UserDetailsServiceImpl(val userRepository: UserRepository,
         val user = getUserByUsername(username)
         user.isEnabled = false
     }
+
+    override fun registrationConfirm(token: String): UserDetailsDTO {
+        val verifyToken = notificationService.getToken(token)
+        if (!notificationService.tokenNotExpired(verifyToken.token)) throw ResponseStatusException(HttpStatus.NOT_FOUND, "The verification email has expired!")
+        enable(verifyToken.username)
+
+        return loadUserByUsername(verifyToken.username)
+    }
+
 }

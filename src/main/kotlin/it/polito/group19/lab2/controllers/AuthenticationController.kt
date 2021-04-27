@@ -11,11 +11,10 @@ import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping("/auth")
-class AuthenticationController(private val userDetailsServiceImpl: UserDetailsServiceImpl,
-                               private val notificationServiceImpl: NotificationServiceImpl ){
+class AuthenticationController(private val userDetailsServiceImpl: UserDetailsServiceImpl ){
 
     @PostMapping("/register")
-    fun register (@RequestBody registerDTO: RegisterDTO): ResponseEntity<String>{
+    fun register(@RequestBody registerDTO: RegisterDTO): ResponseEntity<String>{
 
         userDetailsServiceImpl.addUser(registerDTO)
 
@@ -26,10 +25,10 @@ class AuthenticationController(private val userDetailsServiceImpl: UserDetailsSe
 
     @GetMapping("/registrationConfirm")
     fun registrationConfirm(@RequestParam("token") token: String): ResponseEntity<UserDetailsDTO>{
-        val verifyToken = notificationServiceImpl.getToken(token)
-        if (!notificationServiceImpl.tokenNotExpired(verifyToken.token)) throw ResponseStatusException(HttpStatus.NOT_FOUND, "Token not Expired!")
-        userDetailsServiceImpl.enable(verifyToken.username)
-        return ResponseEntity.status(HttpStatus.OK).body(userDetailsServiceImpl.loadUserByUsername(verifyToken.username))
+
+        val user = userDetailsServiceImpl.registrationConfirm(token)
+
+        return ResponseEntity.status(HttpStatus.OK).body(user)
     }
 
 

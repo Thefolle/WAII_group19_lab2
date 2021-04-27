@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import it.polito.group19.lab2.domain.Rolename
 import it.polito.group19.lab2.dto.RegisterDTO
+import it.polito.group19.lab2.repositories.EmailVerificationTokenRepository
 import it.polito.group19.lab2.repositories.UserRepository
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 
@@ -24,6 +26,9 @@ class UserIntegrationTests {
 
     @Autowired
     private lateinit var userRepository: UserRepository
+
+    @Autowired
+    private lateinit var tokenRepository: EmailVerificationTokenRepository
 
     @Autowired
     private lateinit var mvc: MockMvc
@@ -59,10 +64,15 @@ class UserIntegrationTests {
         register(registerDTO)
 
         var retrievedUser = userRepository.findByUsername(registerDTO.username).get()
-        Assertions.assertThat(retrievedUser.email).isEqualTo(registerDTO.email)
-        Assertions.assertThat(retrievedUser.isEnabled).isFalse
-        Assertions.assertThat(retrievedUser.getRoles()[0]).isEqualTo(Rolename.CUSTOMER)
+        assertThat(retrievedUser.email).isEqualTo(registerDTO.email)
+        assertThat(retrievedUser.isEnabled).isFalse
+        assertThat(retrievedUser.getRoles()[0]).isEqualTo(Rolename.CUSTOMER)
+        assertThat(tokenRepository.findAll().any { registerDTO.username == it.username }).isTrue
 
+        // confirm the registration
+        var token = tokenRepository.findAll().first { registerDTO.username == it.username }.token
+        confirmRegistration(token)
+        assertThat(userRepository.findByUsername(registerDTO.username).get().isEnabled).isTrue
     }
 
     private fun registerMismatchingPasswords(registerDTO: RegisterDTO) {
@@ -78,6 +88,12 @@ class UserIntegrationTests {
 
         mvc.perform(post("/auth/register").contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON).content(body)).andExpect(status().isCreated);
+
+    }
+
+    private fun confirmRegistration(token: String) {
+        mvc.perform(get("/auth/registrationConfirm").contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON).param("token", token)).andExpect(status().isOk);
 
     }
 

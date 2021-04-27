@@ -18,4 +18,6 @@ interface UserDetailsService {
     fun disable(username: String)
 
     fun loadUserByUsername(username: String) : UserDetailsDTO
+
+    fun registrationConfirm(token: String): UserDetailsDTO
 }

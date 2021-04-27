@@ -28,7 +28,7 @@ class NotificationServiceImpl(val emailVerificationTokenRepository: EmailVerific
         return optionalToken.get().toDTO()
     }
 
-    fun tokenNotExpired(token: String): Boolean{
+    override fun tokenNotExpired(token: String): Boolean{
         val t = getToken(token)
         return !t.expiryDate.isBefore(LocalDateTime.now())
     }
