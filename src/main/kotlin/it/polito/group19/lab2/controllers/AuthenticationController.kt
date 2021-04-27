@@ -8,13 +8,14 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/auth")
 class AuthenticationController(private val userDetailsServiceImpl: UserDetailsServiceImpl ){
 
     @PostMapping("/register")
-    fun register(@RequestBody registerDTO: RegisterDTO): ResponseEntity<String>{
+    fun register(@Valid @RequestBody registerDTO: RegisterDTO): ResponseEntity<String>{
 
         userDetailsServiceImpl.addUser(registerDTO)
 
