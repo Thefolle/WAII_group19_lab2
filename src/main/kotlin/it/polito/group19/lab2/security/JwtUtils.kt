@@ -16,10 +16,10 @@ import java.util.*
 class JwtUtils {
 
 
-    @Value("\${application.jwt.jwtExpirationMs}")
+    @get: Value("\${application.jwt.jwtExpirationMs}")
     private val jwtExpirationMs: Long = 1800000
 
-    @Value("\${application.jwt.jwtSecret}")
+    @get: Value("\${application.jwt.jwtSecret}")
     private val jwtSecret: String = "AFDRQMmyH6bxiFpTnkxDRqrZXQhVANRCvEIqFz7oJaJHvNkhD7yOLC93vOl4wne3"
 
     private val keyBytes = Decoders.BASE64.decode(jwtSecret)
