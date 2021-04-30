@@ -1,6 +1,7 @@
 package it.polito.group19.lab2.security
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
@@ -24,6 +25,7 @@ class JwtAuthenticationTokenFilter(val jwtUtils: JwtUtils): OncePerRequestFilter
                 val userDetailsDTO = jwtUtils.getDetailsFromJwtToken(token)
                 var usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(userDetailsDTO, null, userDetailsDTO.authorities)
                 usernamePasswordAuthenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
+                val authentication : Authentication = usernamePasswordAuthenticationToken
 
                 SecurityContextHolder.getContext().authentication = usernamePasswordAuthenticationToken
             }

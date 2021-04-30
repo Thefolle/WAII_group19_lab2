@@ -135,7 +135,7 @@ class Lab2Application{
     @Bean
     fun getAuthenticationEntryPoint(): AuthenticationEntryPoint {
         return AuthenticationEntryPoint() { httpServletRequest: HttpServletRequest, httpServletResponse: HttpServletResponse, authenticationException: AuthenticationException ->
-            throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
+            httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
         }
     }
 
