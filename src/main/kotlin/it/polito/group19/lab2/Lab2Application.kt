@@ -11,12 +11,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.PropertySource
+import org.springframework.http.HttpStatus
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.JavaMailSenderImpl
+import org.springframework.security.core.AuthenticationException
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.AuthenticationEntryPoint
+import org.springframework.web.server.ResponseStatusException
 import java.time.LocalDateTime
 import java.util.*
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 @SpringBootApplication
 @PropertySource(value = ["classpath:application.properties"], ignoreResourceNotFound = false)
@@ -124,6 +130,13 @@ class Lab2Application{
         //javaMailSenderImpl.testConnection()
 
         return javaMailSenderImpl
+    }
+
+    @Bean
+    fun getAuthenticationEntryPoint(): AuthenticationEntryPoint {
+        return AuthenticationEntryPoint() { httpServletRequest: HttpServletRequest, httpServletResponse: HttpServletResponse, authenticationException: AuthenticationException ->
+            throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
+        }
     }
 
 }

@@ -58,7 +58,6 @@ class JwtUtils {
             throw e
         }
 
-        return false
     }
 
 
