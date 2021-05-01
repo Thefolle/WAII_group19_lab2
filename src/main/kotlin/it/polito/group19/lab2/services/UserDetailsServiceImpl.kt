@@ -12,6 +12,7 @@ import it.polito.group19.lab2.repositories.UserRepository
 import it.polito.group19.lab2.security.JwtUtils
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.annotation.Secured
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
@@ -96,11 +97,13 @@ class UserDetailsServiceImpl(val userRepository: UserRepository,
         user.removeRole(role)
     }
 
+    @Secured("ROLE_ADMIN")
     override fun enable(username: String) {
         val user = getUserByUsername(username)
         user.isEnabled = true
     }
 
+    @Secured("ROLE_ADMIN")
     override fun disable(username: String) {
         val user = getUserByUsername(username)
         user.isEnabled = false

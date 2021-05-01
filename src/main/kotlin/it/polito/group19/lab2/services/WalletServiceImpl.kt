@@ -4,10 +4,13 @@ import it.polito.group19.lab2.dto.TransactionDTO
 import it.polito.group19.lab2.dto.WalletDTO
 import it.polito.group19.lab2.domain.Transaction
 import it.polito.group19.lab2.domain.Wallet
+import it.polito.group19.lab2.dto.UserDetailsDTO
 import it.polito.group19.lab2.repositories.CustomerRepository
 import it.polito.group19.lab2.repositories.TransactionRepository
 import it.polito.group19.lab2.repositories.WalletRepository
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.context.SecurityContext
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.server.ResponseStatusException
@@ -38,8 +41,13 @@ class WalletServiceImpl(val walletRepository: WalletRepository, val customerRepo
     }
 
     override fun performTransaction(creditorId: Long, debtorId: Long, transactedMoneyAmount: Float): TransactionDTO {
+
         val creditor = getWalletbyId(creditorId)
         val debtor = getWalletbyId(debtorId)
+
+        //if I am not the owner of the wallet (debtor) I cannot send money
+        val principal = SecurityContextHolder.getContext().authentication.principal as UserDetailsDTO
+        if (debtor.customer.user.username != principal.username) throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "You do not own this wallet!")
 
         if (debtor.balance < transactedMoneyAmount) throw ResponseStatusException(HttpStatus.FORBIDDEN, "Not enough money!")
 

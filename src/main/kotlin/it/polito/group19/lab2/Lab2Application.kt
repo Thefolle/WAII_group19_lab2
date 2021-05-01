@@ -14,6 +14,7 @@ import org.springframework.context.annotation.PropertySource
 import org.springframework.http.HttpStatus
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.JavaMailSenderImpl
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletResponse
 
 @SpringBootApplication
 @PropertySource(value = ["classpath:application.properties"], ignoreResourceNotFound = false)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 class Lab2Application{
 
     @Bean

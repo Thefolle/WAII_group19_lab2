@@ -10,7 +10,7 @@ data class CustomerDTO(
     var deliveryAddress: String,
     @Pattern(regexp = ".*@.*", message = "Invalid email.")
     var email: String,
-    var walletIds: MutableList<Wallet>,
-    var user: Long
+    var walletIds: MutableList<Wallet>?,
+    var user: Long?
 
     )
