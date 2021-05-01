@@ -1,10 +1,13 @@
 package it.polito.group19.lab2.services
 
+import it.polito.group19.lab2.domain.Customer
 import it.polito.group19.lab2.dto.RegisterDTO
 import it.polito.group19.lab2.dto.UserDetailsDTO
 import it.polito.group19.lab2.domain.Rolename
 import it.polito.group19.lab2.domain.User
+import it.polito.group19.lab2.domain.Wallet
 import it.polito.group19.lab2.dto.LoginDTO
+import it.polito.group19.lab2.repositories.CustomerRepository
 import it.polito.group19.lab2.repositories.UserRepository
 import it.polito.group19.lab2.security.JwtUtils
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties
@@ -21,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException
 @Service
 @Transactional
 class UserDetailsServiceImpl(val userRepository: UserRepository,
+                             val customerRepository: CustomerRepository,
                              val passwordEncoder: PasswordEncoder,
                              val notificationService: NotificationServiceImpl,
                              val mailService: MailServiceImpl,
@@ -65,7 +69,17 @@ class UserDetailsServiceImpl(val userRepository: UserRepository,
 
         userRepository.save(user)
 
-        //ToDo add also Customer and link it to User
+        //add a customer entity linked to the user one
+        val customer = Customer(
+                cid = null,
+                name = registerDTO.name,
+                surname = registerDTO.surname,
+                deliveryAddress = registerDTO.address,
+                email = registerDTO.email,
+                user = user
+        )
+
+        customerRepository.save(customer)
 
         val tokenDTO = notificationService.createToken(user.username)
         mailService.sendMessage(toMail = user.email, subject = "Registration Confirmation",
