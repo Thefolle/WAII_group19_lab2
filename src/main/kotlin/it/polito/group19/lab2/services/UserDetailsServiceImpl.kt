@@ -4,8 +4,14 @@ import it.polito.group19.lab2.dto.RegisterDTO
 import it.polito.group19.lab2.dto.UserDetailsDTO
 import it.polito.group19.lab2.domain.Rolename
 import it.polito.group19.lab2.domain.User
+import it.polito.group19.lab2.dto.LoginDTO
 import it.polito.group19.lab2.repositories.UserRepository
+import it.polito.group19.lab2.security.JwtUtils
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties
 import org.springframework.http.HttpStatus
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -17,7 +23,8 @@ import org.springframework.web.server.ResponseStatusException
 class UserDetailsServiceImpl(val userRepository: UserRepository,
                              val passwordEncoder: PasswordEncoder,
                              val notificationService: NotificationServiceImpl,
-                             val mailService: MailServiceImpl): UserDetailsService {
+                             val mailService: MailServiceImpl,
+                             val jwtUtils: JwtUtils): UserDetailsService {
 
     private fun getUserByUsername(username: String): User {
         val userOptional = userRepository.findByUsername(username)
@@ -29,6 +36,13 @@ class UserDetailsServiceImpl(val userRepository: UserRepository,
     override fun loadUserByUsername(username: String): UserDetailsDTO {
         val user = getUserByUsername(username)
         return user.toDTO()
+    }
+
+    override fun authenticateUser(loginDTO: LoginDTO): String {
+        val user = loadUserByUsername(loginDTO.username)
+        val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(user, null, user.authorities)
+        val authentication : Authentication = usernamePasswordAuthenticationToken
+        return jwtUtils.generateJwtToken(authentication)
     }
 
     override fun addUser( registerDTO: RegisterDTO ) {

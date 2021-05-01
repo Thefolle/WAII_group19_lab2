@@ -3,11 +3,15 @@ package it.polito.group19.lab2.services
 import it.polito.group19.lab2.dto.RegisterDTO
 import it.polito.group19.lab2.dto.UserDetailsDTO
 import it.polito.group19.lab2.domain.Rolename
+import it.polito.group19.lab2.dto.LoginDTO
 import org.springframework.security.core.userdetails.UserDetailsService
 
 interface UserDetailsService: UserDetailsService {
 
 //    fun addUser(customer: Customer, userDTO: UserDetailsDTO)
+
+    fun authenticateUser(loginDTO: LoginDTO): String
+
     fun addUser(registerDTO: RegisterDTO)
 
     fun addRole(role: Rolename, username: String)

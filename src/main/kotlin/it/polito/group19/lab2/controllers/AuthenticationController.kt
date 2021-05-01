@@ -1,5 +1,6 @@
 package it.polito.group19.lab2.controllers
 
+import it.polito.group19.lab2.dto.LoginDTO
 import it.polito.group19.lab2.dto.RegisterDTO
 import it.polito.group19.lab2.dto.UserDetailsDTO
 import it.polito.group19.lab2.services.NotificationServiceImpl
@@ -30,6 +31,15 @@ class AuthenticationController(private val userDetailsServiceImpl: UserDetailsSe
         val user = userDetailsServiceImpl.registrationConfirm(token)
 
         return ResponseEntity.status(HttpStatus.OK).body(user)
+    }
+
+    @PostMapping("/login")
+    fun login(@RequestBody loginDTO: LoginDTO): ResponseEntity<Map<String, String>>{
+        val jwtToken = userDetailsServiceImpl.authenticateUser(loginDTO)
+        val map = HashMap<String, String> ()
+        map["jwt"] = jwtToken
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(map)
     }
 
 

@@ -20,27 +20,57 @@ class WebSecurityConfig (val passwordEncoder: PasswordEncoder, val userDetailsSe
             .userDetailsService(userDetailsService)
             .passwordEncoder(passwordEncoder)
 
-    /*.inMemoryAuthentication()
+    /*authenticationManagerBuilder.inMemoryAuthentication()
             .withUser("root")
             .password(passwordEncoder.encode("admin"))
             .roles("user")*/
     }
 
     override fun configure(http: HttpSecurity) {
-        http.sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .authorizeRequests()
-            .antMatchers("auth/**").permitAll()
-            .anyRequest().authenticated()
-            .and()
-            .formLogin()
-            .disable()
-            .exceptionHandling()
-            .authenticationEntryPoint(authenticationEntryPoint)
-            .and()
+
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+        http.authorizeRequests().antMatchers("/").permitAll()
+
+        http.authorizeRequests().antMatchers("/auth/**").permitAll()
+
+        http.authorizeRequests().antMatchers("/wallets/**").authenticated()
+
+        //http.formLogin().permitAll().and().logout().permitAll()
+
+        http.csrf().disable()
+
+        http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
+
+        http.addFilterBefore(JwtAuthenticationTokenFilter(jwtUtils), UsernamePasswordAuthenticationFilter::class.java)
+
+
+
+
+
+//        http.sessionManagement()
+//            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//            .and()
+//                .authorizeRequests()
+//                .antMatchers("/wallets/**")
+//                .authenticated()
+//                .and()
+//
+//                .authorizeRequests()
+//                .antMatchers("/auth/**").permitAll()
+//            //.anyRequest().authenticated()
+//            .and()
+//                .authorizeRequests()
+//                .antMatchers("/login", "/logout")
+//                .permitAll()
+//                .and()
+//            //.formLogin()
+//            //.disable()
+//            .exceptionHandling()
+//            .authenticationEntryPoint(authenticationEntryPoint)
+//            .and()
 //            .addFilterBefore(JwtAuthenticationTokenFilter(jwtUtils), UsernamePasswordAuthenticationFilter::class.java)
-            .csrf().disable()
+//            .csrf().disable()
     }
 
 }
