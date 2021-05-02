@@ -65,7 +65,7 @@ class UserDetailsServiceImpl(val userRepository: UserRepository,
             password = passwordEncoder.encode(registerDTO.password),
             email = registerDTO.email,
             isEnabled = false,
-            roles = Rolename..toString()
+            roles = Rolename.CUSTOMER.toString()
         )
 
         userRepository.save(user)
