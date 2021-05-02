@@ -27,6 +27,6 @@ class JwtTests {
 
         println("user: ${details.uname}, ${details.roles}")
 
-        assert(details.uname == "user5" && details.roles == Rolename..toString())
+        assert(details.uname == "user5" && details.roles == Rolename.CUSTOMER.toString())
     }
 }

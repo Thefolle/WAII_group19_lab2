@@ -10,6 +10,7 @@ import it.polito.group19.lab2.dto.LoginDTO
 import it.polito.group19.lab2.repositories.CustomerRepository
 import it.polito.group19.lab2.repositories.UserRepository
 import it.polito.group19.lab2.security.JwtUtils
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.annotation.Secured
@@ -32,6 +33,10 @@ class UserDetailsServiceImpl(val userRepository: UserRepository,
                              val mailService: MailServiceImpl,
                              val jwtUtils: JwtUtils): UserDetailsService {
 
+    @Value("\${application.jwt.jwtHeader}")
+    private lateinit var jwtHeader: String
+
+
     private fun getUserByUsername(username: String): User {
         val userOptional = userRepository.findByUsername(username)
         if (userOptional.isEmpty) throw UsernameNotFoundException("No User with username: $username exists.")
@@ -49,7 +54,7 @@ class UserDetailsServiceImpl(val userRepository: UserRepository,
         val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(user, null, user.authorities)
         val authentication : Authentication = usernamePasswordAuthenticationToken
         val token = jwtUtils.generateJwtToken(authentication)
-        response.setHeader("Authorization", token)
+        response.setHeader(jwtHeader, token)
     }
 
     override fun addUser( registerDTO: RegisterDTO ) {
