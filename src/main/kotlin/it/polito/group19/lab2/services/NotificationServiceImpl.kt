@@ -5,6 +5,7 @@ import it.polito.group19.lab2.dto.EmailVerificationTokenDTO
 import it.polito.group19.lab2.repositories.EmailVerificationTokenRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.server.ResponseStatusException
@@ -12,7 +13,10 @@ import java.time.LocalDateTime
 
 @Service
 @Transactional
-class NotificationServiceImpl(val emailVerificationTokenRepository: EmailVerificationTokenRepository): NotificationService {
+class NotificationServiceImpl(
+            val emailVerificationTokenRepository: EmailVerificationTokenRepository
+            ): NotificationService {
+
 
     @Value("\${application.jwt.jwtExpirationMs}")
     private lateinit var jwtExpirationMs: String
@@ -36,5 +40,12 @@ class NotificationServiceImpl(val emailVerificationTokenRepository: EmailVerific
     override fun tokenNotExpired(token: String): Boolean{
         val t = getToken(token)
         return !t.expiryDate.isBefore(LocalDateTime.now())
+    }
+
+    // clear Expired Tokens once a day
+    @Scheduled(fixedRate = 86400000)
+    fun clearExpiredTokens(){
+        val now = LocalDateTime.now()
+        emailVerificationTokenRepository.deleteByExpiryDateLessThan(now)
     }
 }
