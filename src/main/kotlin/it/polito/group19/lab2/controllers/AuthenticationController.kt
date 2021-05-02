@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 
 @RestController
@@ -34,12 +35,10 @@ class AuthenticationController(private val userDetailsServiceImpl: UserDetailsSe
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody loginDTO: LoginDTO): ResponseEntity<Map<String, String>>{
-        val jwtToken = userDetailsServiceImpl.authenticateUser(loginDTO)
-        val map = HashMap<String, String> ()
-        map["jwt"] = jwtToken
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(map)
+    fun login(@RequestBody loginDTO: LoginDTO, response: HttpServletResponse): ResponseEntity<Nothing> {
+        userDetailsServiceImpl.authenticateUser(loginDTO, response)
+
+        return ResponseEntity.status(HttpStatus.CREATED).build()
     }
 
 

@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.server.ResponseStatusException
+import javax.servlet.http.HttpServletResponse
 
 @Service
 @Transactional
@@ -43,11 +44,12 @@ class UserDetailsServiceImpl(val userRepository: UserRepository,
         return user.toDTO()
     }
 
-    override fun authenticateUser(loginDTO: LoginDTO): String {
+    override fun authenticateUser(loginDTO: LoginDTO, response: HttpServletResponse) {
         val user = loadUserByUsername(loginDTO.username)
         val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(user, null, user.authorities)
         val authentication : Authentication = usernamePasswordAuthenticationToken
-        return jwtUtils.generateJwtToken(authentication)
+        val token = jwtUtils.generateJwtToken(authentication)
+        response.setHeader("Authorization", token)
     }
 
     override fun addUser( registerDTO: RegisterDTO ) {

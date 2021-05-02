@@ -5,12 +5,13 @@ import it.polito.group19.lab2.dto.UserDetailsDTO
 import it.polito.group19.lab2.domain.Rolename
 import it.polito.group19.lab2.dto.LoginDTO
 import org.springframework.security.core.userdetails.UserDetailsService
+import javax.servlet.http.HttpServletResponse
 
 interface UserDetailsService: UserDetailsService {
 
 //    fun addUser(customer: Customer, userDTO: UserDetailsDTO)
 
-    fun authenticateUser(loginDTO: LoginDTO): String
+    fun authenticateUser(loginDTO: LoginDTO, response: HttpServletResponse)
 
     fun addUser(registerDTO: RegisterDTO)
 
