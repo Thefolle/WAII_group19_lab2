@@ -113,7 +113,7 @@ class UserIntegrationTests {
 
         // A customer should not be able to enable another user
 
-        var customerRole = mutableListOf(GrantedAuthority { "ROLE_CUSTOMER" })
+        var customerRole = mutableListOf(GrantedAuthority { Rolename.CUSTOMER.toString() })
         usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(null, null, customerRole)
         authentication = usernamePasswordAuthenticationToken
         SecurityContextHolder.getContext().authentication = authentication
