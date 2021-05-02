@@ -3,6 +3,7 @@ package it.polito.group19.lab2.security
 import it.polito.group19.lab2.services.UserDetailsService
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
@@ -13,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 class WebSecurityConfig (val passwordEncoder: PasswordEncoder, val userDetailsService: UserDetailsService, val authenticationEntryPoint: AuthenticationEntryPoint, val jwtUtils: JwtUtils): WebSecurityConfigurerAdapter(){
 
     override fun configure(authenticationManagerBuilder: AuthenticationManagerBuilder) {

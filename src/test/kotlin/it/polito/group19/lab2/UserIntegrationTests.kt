@@ -3,9 +3,12 @@ package it.polito.group19.lab2
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import it.polito.group19.lab2.domain.Rolename
+import it.polito.group19.lab2.domain.User
+import it.polito.group19.lab2.dto.LoginDTO
 import it.polito.group19.lab2.dto.RegisterDTO
 import it.polito.group19.lab2.repositories.EmailVerificationTokenRepository
 import it.polito.group19.lab2.repositories.UserRepository
+import it.polito.group19.lab2.services.UserDetailsServiceImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -14,6 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -29,6 +38,12 @@ class UserIntegrationTests {
 
     @Autowired
     private lateinit var tokenRepository: EmailVerificationTokenRepository
+
+    @Autowired
+    private lateinit var userDetailsServiceImpl: UserDetailsServiceImpl
+
+    @Autowired
+    private lateinit var passwordEncoder: PasswordEncoder
 
     @Autowired
     private lateinit var mvc: MockMvc
@@ -74,6 +89,42 @@ class UserIntegrationTests {
         confirmRegistration(token)
         assertThat(userRepository.findByUsername(registerDTO.username).get().isEnabled).isTrue
     }
+
+    @Test
+    fun `Test enable and disable authorization constraints`() {
+        // An admin should be able to enable a user
+
+        val userToBeEnabled = User(null, "notUsedField", passwordEncoder.encode("notUsedField"), "notUsedField@mail.com", false, "")
+        userRepository.save(userToBeEnabled)
+
+        var adminRole = mutableListOf(GrantedAuthority { Rolename.ADMIN.toString() })
+        var usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(null, null, adminRole)
+        var authentication : Authentication = usernamePasswordAuthenticationToken
+        SecurityContextHolder.getContext().authentication = authentication
+
+        userDetailsServiceImpl.enable(userToBeEnabled.username)
+
+        assertThat(userRepository.findByUsername(userToBeEnabled.username).get().isEnabled).isTrue
+
+        userDetailsServiceImpl.disable(userToBeEnabled.username)
+
+        assertThat(userRepository.findByUsername(userToBeEnabled.username).get().isEnabled).isFalse
+
+
+        // A customer should not be able to enable another user
+
+        var customerRole = mutableListOf(GrantedAuthority { "ROLE_CUSTOMER" })
+        usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(null, null, customerRole)
+        authentication = usernamePasswordAuthenticationToken
+        SecurityContextHolder.getContext().authentication = authentication
+
+        assertThrows<AccessDeniedException> { userDetailsServiceImpl.enable(userToBeEnabled.username) }
+        assertThat(userRepository.findByUsername(userToBeEnabled.username).get().isEnabled).isFalse
+        assertThrows<AccessDeniedException> { userDetailsServiceImpl.disable(userToBeEnabled.username) }
+    }
+
+
+
 
     private fun registerMismatchingPasswords(registerDTO: RegisterDTO) {
         var body = objectMapper.writeValueAsString(registerDTO);

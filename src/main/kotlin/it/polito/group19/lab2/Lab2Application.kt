@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletResponse
 
 @SpringBootApplication
 @PropertySource(value = ["classpath:application.properties"], ignoreResourceNotFound = false)
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 class Lab2Application{
 
     @Bean
