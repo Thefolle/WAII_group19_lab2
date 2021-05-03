@@ -23,20 +23,20 @@ class User(
 
     fun getRoles(): List<Rolename> {
         return if (roles.isEmpty()) mutableListOf<Rolename>()
-        else roles.split("_").map { Rolename.valueOf(it) }.toMutableList()
+        else roles.split(",").map { Rolename.valueOf(it) }.toMutableList()
     }
 
     fun addRole(role: Rolename) {
         if (!roles.contains(role.name)) {
             var newRoles = getRoles().toMutableList()
             newRoles.add(role)
-            roles = newRoles.joinToString("_")
+            roles = newRoles.joinToString(",")
         }
     }
 
     fun removeRole(role: Rolename) {
         if (roles.contains(role.name)) {
-            roles = roles.split("_").filter { it != role.name }.joinToString("_")
+            roles = roles.split(",").filter { it != role.name }.joinToString(",")
         }
     }
 
