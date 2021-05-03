@@ -13,7 +13,7 @@ class EmailVerificationToken(
         @GeneratedValue
         var EVTid: Long?,
         var token: String = UUID.randomUUID().toString(),
-        var expiryDate:LocalDateTime,
+        var expiryDate: LocalDateTime,
         var username: String) {
 
         fun toDTO() = EmailVerificationTokenDTO(
